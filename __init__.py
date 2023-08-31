@@ -1,10 +1,12 @@
-import sys, os
+import sys, os, shutil
 sys.path.insert(0,os.path.dirname(os.path.realpath(__file__)))
 from .utilities_conversion import *
 from .utilities_primitives import *
 from .utilities_developer import *
 from .utilities_images import *
 from .utilities_conditioning import *
+from .utilities_strings import *
+from .common import *
 
 NODE_CLASS_MAPPINGS = { 
                       # conditioning
@@ -26,6 +28,8 @@ NODE_CLASS_MAPPINGS = {
                         "Int Pair" : PrimitiveIntPair,
                         "Float_" : PrimitiveFloat,
                         "Float Pair" : PrimitiveFloatPair,
+                      # strings
+                        "Show Text" : ShowText,
                       }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -35,3 +39,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 }
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
+
+shutil.copytree(module_js_directory_utilities, application_web_extensions_directory, dirs_exist_ok=True)

@@ -1,6 +1,11 @@
 import os
+import folder_paths
 
 module_root_directory_utilities = os.path.dirname(os.path.realpath(__file__))
+module_js_directory_utilities = os.path.join(module_root_directory_utilities, "js")
+
+application_root_directory = os.path.dirname(folder_paths.__file__)
+application_web_extensions_directory = os.path.join(application_root_directory, "web", "extensions")
 
 class Base_utilities:
     def __init__(self):
