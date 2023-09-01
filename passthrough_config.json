@@ -1,0 +1,15 @@
+{
+    "VAEEncodeForInpaintReturn" : {
+        "display_name" : "VAE Encode For Inpaint Passthrough",
+        "based_on" : "VAEEncodeForInpaint",
+        "inputs_to_pass" : ["vae"], 
+        "category": null
+    },
+    "VAEEncodeReturn" : {
+        "display_name" : "VAE Encode Passthrough",
+        "based_on" : "VAEEncode",
+        "inputs_to_pass" : ["vae"],
+        "category": "latent"
+    },
+    "SHOW" : 1
+}

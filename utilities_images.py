@@ -31,7 +31,7 @@ class ResizeImage(Base_utilities):
         "x8": (["yes", "no"],),
         "image": ("IMAGE",),
         "factor": ("FLOAT", {"default":1.0, "min":0.0, "step":0.1 }),
-        "max_dimension": ("INT", {"default": 0, }), 
+        "max_dimension": ("INT", {"default": 10000, }), 
     }
     OPTIONAL = {
         "image_to_match": ("IMAGE",),
@@ -53,7 +53,12 @@ class ResizeImage(Base_utilities):
             height, width = image_to_match.shape[1:3]
         else:
             h,w = image.shape[1:3]
-            too_big_by = max(h*factor/max_dimension, w*factor/max_dimension, 1.0) if max_dimension else 1.0
+
+        height = h * factor
+        width = width * factor
+
+        too_big_by = max(height/max_dimension, width/max_dimension)
+        if too_big_by > 1.0:
             height = math.floor(h*factor/too_big_by)
             width = math.floor(w*factor/too_big_by)
 

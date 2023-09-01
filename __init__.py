@@ -6,6 +6,7 @@ from .utilities_developer import *
 from .utilities_images import *
 from .utilities_conditioning import *
 from .utilities_strings import *
+from .utilities_passthroughs import *
 from .common import *
 
 NODE_CLASS_MAPPINGS = { 
@@ -30,13 +31,20 @@ NODE_CLASS_MAPPINGS = {
                         "Float Pair" : PrimitiveFloatPair,
                       # strings
                         "Show Text" : ShowText,
+                        "Regex Substitution" : RegexSub,                      
                       }
+
+for m in PASSTHROUGH_MAPPINGS:
+    NODE_CLASS_MAPPINGS[m] = PASSTHROUGH_MAPPINGS[m]
 
 NODE_DISPLAY_NAME_MAPPINGS = {
                         "String_" : "String",
                         "Int_" : "Int",
                         "Float_" : "Float",   
 }
+
+for m in PASSTHROUGH_NAME_MAPPINGS:
+    NODE_DISPLAY_NAME_MAPPINGS[m] = PASSTHROUGH_NAME_MAPPINGS[m]
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 

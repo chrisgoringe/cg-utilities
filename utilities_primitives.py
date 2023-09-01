@@ -7,7 +7,7 @@ class PrimitiveString(Base_utilities):
 
     @classproperty
     def REQUIRED(cls):
-        return { "value": (cls.TYPE, {"default": cls.DEFAULT}) }
+        return { "value": (cls.TYPE, {"default": cls.DEFAULT, "multiline": True}) }
 
     @classproperty
     def RETURN_TYPES(cls):
@@ -24,8 +24,11 @@ class PrimitiveString(Base_utilities):
 class PrimitiveInt(PrimitiveString):
     TYPE = "INT"
     DEFAULT = 0
+    @classproperty
+    def REQUIRED(cls):
+        return { "value": (cls.TYPE, {"default": cls.DEFAULT}) }
 
-class PrimitiveFloat(PrimitiveString):
+class PrimitiveFloat(PrimitiveInt):
     TYPE = "FLOAT"
     DEFAULT = 0.0
 
