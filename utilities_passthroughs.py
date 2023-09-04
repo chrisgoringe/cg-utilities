@@ -69,9 +69,11 @@ def create_passthroughs():
                 DISPLAY_MAP[class_name] = items[key].get('display_name', key)
             
             if 'SHOW' in items and items['SHOW']:
-                print("List of all unique names of node type that have been loaded and can be used in `based_on`:")
+                print("utilities_passthroughs: List of all unique names of node type that have been loaded and can be used in `based_on`:")
                 for name in NODE_CLASS_MAPPINGS:
                     print(name)
+            else:
+                print("utilities_passthroughs: to see all nodes available set \"SHOW\" : 1 in passthrough_config.json")
                     
     except (KeyError,PassthroughException,json.decoder.JSONDecodeError):
         print(f"passthrough_config error - {sys.exc_info()[0]} - {sys.exc_info()[1]}")

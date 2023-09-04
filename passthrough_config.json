@@ -11,5 +11,5 @@
         "inputs_to_pass" : ["vae"],
         "category": "latent"
     },
-    "SHOW" : 1
+    "SHOW" : 0
 }

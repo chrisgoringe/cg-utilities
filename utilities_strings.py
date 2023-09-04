@@ -5,7 +5,7 @@ class ShowText(Base_utilities):
     CATEGORY = "utilities/strings"
     REQUIRED = { "text": ("STRING", {"forceInput": True}), }
     RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("text",)
+    RETURN_NAMES = ("text_displayed",)
     OUTPUT_NODE = True
 
     def func(self, text):

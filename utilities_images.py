@@ -52,9 +52,9 @@ class ResizeImage(Base_utilities):
         if image_to_match:
             height, width = image_to_match.shape[1:3]
         else:
-            h,w = image.shape[1:3]
+            height, width = image.shape[1:3]
 
-        height = h * factor
+        height = height * factor
         width = width * factor
 
         too_big_by = max(height/max_dimension, width/max_dimension)

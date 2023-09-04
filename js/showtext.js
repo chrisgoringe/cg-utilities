@@ -1,32 +1,47 @@
 import { app } from "../../../scripts/app.js";
 import { ComfyWidgets } from "../../../scripts/widgets.js";
 
-// Displays input text on a node
+const version = 1;
+const name = "cg.customnodes.ShowText";
+const index = app.extensions.findIndex((ext) => ext.name === name);
+var install = true;
+if (index>=0) {
+	const installed = app.extensions[index].version;
+	if (installed >= version) { install = false; }
+	else { app.extensions.splice(index,1); }
+}
 
-app.registerExtension({
-	name: "cg.ShowText",
-	async beforeRegisterNodeDef(nodeType, nodeData, app) {
-		if (nodeData.name === "Show Text" || nodeData.name === "Show Metadata") {
-			const onExecuted = nodeType.prototype.onExecuted;
-			nodeType.prototype.onExecuted = function (message) {
-				onExecuted?.apply(this, arguments);
+if (install) {
+	app.registerExtension({
+		name: name,
+		version: version,
+		async beforeRegisterNodeDef(nodeType, nodeData, app) {
+			if (nodeData.output_name.findIndex((n) => n==="text_displayed") >= 0) {
+				const onExecuted = nodeType.prototype.onExecuted;
+				const onExecutionStart = nodeType.prototype.onExecutionStart;
 
-				if (this.widgets) {
-					const pos = this.widgets.findIndex((w) => w.name === "text");
-					if (pos !== -1) {
-						for (let i = pos; i < this.widgets.length; i++) {
-							this.widgets[i].onRemove?.();
-						}
-						this.widgets.length = pos;
+				nodeType.prototype.onExecuted = function (message) {
+					onExecuted?.apply(this, arguments);
+					var text = message.text_displayed.join('');
+					var w = this.widgets?.find((w) => w.name === "text_display");
+					if (w === undefined) {
+						w = ComfyWidgets["STRING"](this, "text_display", ["STRING", { multiline: true }], app).widget;
+						w.inputEl.readOnly = true;
+						w.inputEl.style.opacity = 0.6;
 					}
+					w.value = text;
+					this.onResize?.(this.size);
 				}
-				const w = ComfyWidgets["STRING"](this, "text", ["STRING", { multiline: true }], app).widget;
-				w.inputEl.readOnly = true;
-				w.inputEl.style.opacity = 0.6;
-				w.value = message.text.join('');
-
-				this.onResize?.(this.size);
-			};
-		}
-	},
-});
+					
+				nodeType.prototype.onExecutionStart = function () {
+					onExecutionStart?.apply(this);
+					var w = this.widgets?.find((w) => w.name === "text_display"); 
+					if (w !== undefined) {
+						w.value = '';
+						this.onResize?.(this.size);
+					}
+				};
+			}
+		},
+	});
+}
