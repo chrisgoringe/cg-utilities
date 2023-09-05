@@ -24,11 +24,8 @@ NODE_CLASS_MAPPINGS = {
                         "Combine Images" :CombineImages,
                       # primitives
                         "String_" : PrimitiveString,
-                        "String Pair" : PrimitiveStringPair,
                         "Int_" : PrimitiveInt,
-                        "Int Pair" : PrimitiveIntPair,
                         "Float_" : PrimitiveFloat,
-                        "Float Pair" : PrimitiveFloatPair,
                       # strings
                         "Show Text" : ShowText,
                         "Regex Substitution" : RegexSub,                      

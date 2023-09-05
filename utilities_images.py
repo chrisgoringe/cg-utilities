@@ -62,9 +62,12 @@ class ResizeImage(Base_utilities):
             height = math.floor(h*factor/too_big_by)
             width = math.floor(w*factor/too_big_by)
 
-        if x8=="Yes":
+        if x8=="yes":
             height = ((4+height)//8) * 8
             width = ((4+width)//8) * 8
+
+        height = int(height)
+        width = int(width)
         
         return (self.resize(image, height, width),
                 self.resize(image_to_match or image, height, width),) 

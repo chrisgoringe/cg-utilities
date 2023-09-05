@@ -9,7 +9,7 @@ class ShowText(Base_utilities):
     OUTPUT_NODE = True
 
     def func(self, text):
-        return {"ui": {"text": text}, "result": (text,)}
+        return {"ui": {"text_displayed": text}, "result": (text,)}
     
 class RegexSub(Base_utilities):
     CATEGORY = "utilities/strings"
