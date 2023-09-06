@@ -1,5 +1,5 @@
 from .common import Base_utilities
-import re
+import re, datetime
 
 class ShowText(Base_utilities):
     CATEGORY = "utilities/strings"
@@ -27,3 +27,13 @@ class RegexSub(Base_utilities):
             print("Exception in RegexSub")
             return (text,)
         
+class Substitute(Base_utilities):
+    CATEGORY = "utilities/strings"
+    REQUIRED = {"template": ("STRING", {"default":"", "multiline": True })}
+    OPTIONAL = { "x": ("*", {}), "y": ("*", {}), "z": ("*", {}), }
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("string",)
+    def func(self, template:str, x="", y="", z=""):
+        return (template.replace("[X]",str(x)).replace("[Y]",str(y)).replace("[Z]",str(z)).replace(r"%date%",self.date_str()),)
+    def date_str(self):
+        return datetime.datetime.today().strftime('%Y-%m-%d')    

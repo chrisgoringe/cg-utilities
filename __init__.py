@@ -29,7 +29,8 @@ NODE_CLASS_MAPPINGS = {
                         "Float_" : PrimitiveFloat,
                       # strings
                         "Show Text" : ShowText,
-                        "Regex Substitution" : RegexSub,                      
+                        "Regex Substitution" : RegexSub,      
+                        "Substitute" : Substitute,                
                       }
 
 for m in PASSTHROUGH_MAPPINGS:
