@@ -59,8 +59,8 @@ class ResizeImage(Base_utilities):
 
         too_big_by = max(height/max_dimension, width/max_dimension)
         if too_big_by > 1.0:
-            height = math.floor(h*factor/too_big_by)
-            width = math.floor(w*factor/too_big_by)
+            height = math.floor(height*factor/too_big_by)
+            width = math.floor(width*factor/too_big_by)
 
         if x8=="yes":
             height = ((4+height)//8) * 8
