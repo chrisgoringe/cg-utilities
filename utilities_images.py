@@ -76,7 +76,7 @@ class CompareImages(Base_utilities):
     CATEGORY = "utilities/images"
     REQUIRED = { "image1": ("IMAGE",), "image2": ("IMAGE",), }
     RETURN_TYPES = ("IMAGE","IMAGE")
-    RETURN_NAMES = ("diff",)
+    RETURN_NAMES = ("all", "diff",)
 
     def func(self, image1:torch.Tensor, image2:torch.Tensor):
         diff = torch.abs(image1-image2)
