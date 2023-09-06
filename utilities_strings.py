@@ -17,13 +17,13 @@ class RegexSub(Base_utilities):
                 "pattern": ("STRING", {"default": "" }),
                 "replacement": ("STRING", {"default": ""}),
                 }
-    RETURN_TYPES = ("STRING","INT",)
-    RETURN_NAMES = ("text","n_subs",)
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("text",)
 
     def func(self, text, pattern, replacement):
         try:
-            return re.subn(pattern, replacement, text)
+            return (re.sub(pattern, replacement, text),)
         except:
             print("Exception in RegexSub")
-            return (text,0,)
+            return (text,)
         
