@@ -21,7 +21,8 @@ NODE_CLASS_MAPPINGS = {
                       # images
                         "Image Size" : ImageSize,
                         "Resize Image" : ResizeImage,
-                        "Combine Images" :CombineImages,
+                        "Combine Images" : CombineImages,
+                        "Compare Images" : CompareImages,
                       # primitives
                         "String_" : PrimitiveString,
                         "Int_" : PrimitiveInt,
