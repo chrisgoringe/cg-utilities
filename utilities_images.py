@@ -70,7 +70,7 @@ class ResizeImage(Base_utilities):
         width = int(width)
         
         return (self.resize(image, height, width),
-                self.resize(image_to_match or image, height, width),
+                self.resize(image_to_match if image_to_match is not None else image, height, width),
                 width, height) 
     
 class CompareImages(Base_utilities):
