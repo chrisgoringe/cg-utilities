@@ -73,7 +73,7 @@ class PassthroughInfo(Base_utilities):
 def create_passthroughs():
     MAP = {}
     DISPLAY_MAP = {}
-    Passthrough_Info.NAMES = [n for n in NODE_CLASS_MAPPINGS]
+    PassthroughInfo.NAMES = [n for n in NODE_CLASS_MAPPINGS]
     try:
         config_file = os.path.join(module_root_directory_utilities, "passthrough_config.json")
         with open(config_file, 'r') as file:
@@ -96,7 +96,7 @@ def create_passthroughs():
 
                 MAP[key] = clazz
                 DISPLAY_MAP[key] = items[key].get('display_name', key)
-                Passthrough_Info.CREATED.append(DISPLAY_MAP[key])
+                PassthroughInfo.CREATED.append(DISPLAY_MAP[key])
                     
     except (KeyError,PassthroughException,json.decoder.JSONDecodeError):
         print(f"passthrough_config error - {sys.exc_info()[0]} - {sys.exc_info()[1]}")
