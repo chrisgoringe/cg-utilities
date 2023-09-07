@@ -8,6 +8,7 @@ class ImageSize(Base_utilities):
     RETURN_TYPES = ("INT","INT","STRING",)
     RETURN_NAMES = ("width","height","text_displayed")
     OUTPUT_NODE = True
+    DESCRIPTION = "displays_text"
     def func(self, image:torch.Tensor):
         w, h = image.shape[2],image.shape[1]
         text = f"{w} x {h}"
