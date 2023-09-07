@@ -31,3 +31,14 @@ class classproperty(object):
         self.f = f
     def __get__(self, obj, owner):
         return self.f(owner)
+    
+def textdisplay(clazz):
+    clazz.DESCRIPTION = "displays_text"
+    clazz.OUTPUT_NODE = True
+    clazz._FUNCTION = getattr(clazz,'FUNCTION')
+    def _func_(self, **kwargs):
+        returns = getattr(self, self._FUNCTION)(**kwargs)
+        return {"ui": {"text_displayed": returns[-1]}, "result":returns[:-1]}
+    clazz.FUNCTION = '_func_'
+    clazz._func_ = _func_
+    return clazz

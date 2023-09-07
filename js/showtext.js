@@ -1,7 +1,7 @@
 import { app } from "../../../scripts/app.js";
 import { ComfyWidgets } from "../../../scripts/widgets.js";
 
-const version = 1;
+const version = 2;
 const name = "cg.customnodes.ShowText";
 const index = app.extensions.findIndex((ext) => ext.name === name);
 var install = true;
@@ -16,7 +16,7 @@ if (install) {
 		name: name,
 		version: version,
 		async beforeRegisterNodeDef(nodeType, nodeData, app) {
-			if (nodeData.output_name.findIndex((n) => n==="text_displayed") >= 0) {
+			if (nodeData.output_name.findIndex((n) => n==="text_displayed") >= 0 || nodeData.description === 'displays_text') {
 				const onExecuted = nodeType.prototype.onExecuted;
 				const onExecutionStart = nodeType.prototype.onExecutionStart;
 
