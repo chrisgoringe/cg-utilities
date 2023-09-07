@@ -31,7 +31,9 @@ NODE_CLASS_MAPPINGS = {
                       # strings
                         "Show Text" : ShowText,
                         "Regex Substitution" : RegexSub,      
-                        "Substitute" : Substitute,                
+                        "Substitute" : Substitute,      
+                      # info
+                        "Passthrough Info" : PassthroughInfo,    
                       }
 
 for m in PASSTHROUGH_MAPPINGS:

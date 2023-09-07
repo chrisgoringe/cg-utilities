@@ -1,4 +1,4 @@
-from .common import classproperty, module_root_directory_utilities
+from .common import classproperty, module_root_directory_utilities, Base_utilities
 import json, os, sys
 from nodes import NODE_CLASS_MAPPINGS
 
@@ -61,16 +61,24 @@ def passthrough_factory(name, based_on_class, passed_input_list, passed_return_n
                  'CLONE':clone,
                  'CATEGORY':category or ReturnInput.CATEGORY})
 
+class PassthroughInfo(Base_utilities):
+    CATEGORY = "utilities/info"
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("text_displayed",)
+    OUTPUT_NODE = True
+    NAMES = CREATED = []
+    def func(self):
+        return ("\n".join(["Classes created:",]+self.CREATED)+"\n\n"+"\n".join(["Classes available:",]+self.NAMES))
+
 def create_passthroughs():
     MAP = {}
     DISPLAY_MAP = {}
+    Passthrough_Info.NAMES = [n for n in NODE_CLASS_MAPPINGS]
     try:
         config_file = os.path.join(module_root_directory_utilities, "passthrough_config.json")
         with open(config_file, 'r') as file:
             items:dict = json.load(file)
-            for i, key in enumerate(items):
-                if key=='SHOW':
-                    continue
+            for key in items:
                 based_on_clazz = NODE_CLASS_MAPPINGS[items[key]['based_on']]
                 inputs_to_pass = items[key]['inputs_to_pass']
                 passed_return_names = items[key].get('passed_return_names',None)
@@ -88,13 +96,7 @@ def create_passthroughs():
 
                 MAP[key] = clazz
                 DISPLAY_MAP[key] = items[key].get('display_name', key)
-            
-            if 'SHOW' in items and items['SHOW']:
-                print("utilities_passthroughs: List of all unique names of node type that have been loaded and can be used in `based_on`:")
-                for name in NODE_CLASS_MAPPINGS:
-                    print(name)
-            else:
-                print("utilities_passthroughs: to see all nodes available set \"SHOW\" : 1 in passthrough_config.json")
+                Passthrough_Info.CREATED.append(DISPLAY_MAP[key])
                     
     except (KeyError,PassthroughException,json.decoder.JSONDecodeError):
         print(f"passthrough_config error - {sys.exc_info()[0]} - {sys.exc_info()[1]}")
