@@ -1,4 +1,4 @@
-from .common import Base_utilities, classproperty
+from .common import Base_utilities
 import torch
 import math
 
