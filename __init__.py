@@ -12,6 +12,7 @@ from .common import *
 NODE_CLASS_MAPPINGS = { 
                       # conditioning
                         "Two Clip Text Encode" : TwoClipTextEncode,
+                        "Merge Conditionings" : MergeConditionings,
                       # conversion
                         "To String" : ConvertToString,
                         "To Int" : ConvertToInt,
