@@ -5,10 +5,13 @@ import math
 class ImageSize(Base_utilities):
     CATEGORY = "utilities/images"
     REQUIRED = { "image": ("IMAGE",), }
-    RETURN_TYPES = ("INT","INT")
-    RETURN_NAMES = ("width","height")
+    RETURN_TYPES = ("INT","INT","STRING",)
+    RETURN_NAMES = ("width","height","text_displayed")
+    OUTPUT_NODE = True
     def func(self, image:torch.Tensor):
-        return (image.shape[2],image.shape[1])
+        w, h = image.shape[2],image.shape[1]
+        text = f"{w} x {h}"
+        return {"ui": {"text_displayed": text}, "result": (w,h,text)}
     
 class CombineImages(Base_utilities):
     CATEGORY = "utilities/images"
