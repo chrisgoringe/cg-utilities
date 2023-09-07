@@ -35,6 +35,7 @@ class ResizeImage(Base_utilities):
     }
     OPTIONAL = {
         "image_to_match": ("IMAGE",),
+        "mask": ("MASK",)
     }
     RETURN_TYPES = ("IMAGE","IMAGE","INT","INT",)
     RETURN_NAMES = ("image","matched_image","width","height",)
