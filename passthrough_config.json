@@ -15,6 +15,5 @@
         "passed_return_names" : ["model","positive","negative","original_latent"],
         "category": "sampling"
     },
-
-    "SHOW" : 1
+    "Bad Key" : {}
 }

@@ -49,7 +49,7 @@ class ResizeImage(Base_utilities):
         return torch.permute(scaled, (0, 2, 3, 1))
 
     def func(self, x8:str, image:torch.tensor, factor:float=1.0, max_dimension:int=0, image_to_match:torch.tensor=None):
-        if image_to_match:
+        if image_to_match is not None:
             height, width = image_to_match.shape[1:3]
         else:
             height, width = image.shape[1:3]

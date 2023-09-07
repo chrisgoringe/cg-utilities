@@ -66,38 +66,47 @@ class PassthroughInfo(Base_utilities):
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("text_displayed",)
     OUTPUT_NODE = True
-    NAMES = CREATED = []
+    NAMES = CREATED = FAILED = []
     def func(self):
-        return ("\n".join(["Classes created:",]+self.CREATED)+"\n\n"+"\n".join(["Classes available:",]+self.NAMES))
+        return ("\n".join(["Errors:",]+self.FAILED)+"\n\n" if self.FAILED else "") +\
+               ("\n".join(["Classes created:",]+self.CREATED)+"\n\n" if self.CREATED else "") +\
+               ("\n".join(["Classes available:",]+self.NAMES)+"\n\n" if self.NAMES else "")
 
 def create_passthroughs():
     MAP = {}
     DISPLAY_MAP = {}
     PassthroughInfo.NAMES = [n for n in NODE_CLASS_MAPPINGS]
+    PassthroughInfo.CREATED = []
+    PassthroughInfo.FAILED = []
+
     try:
         config_file = os.path.join(module_root_directory_utilities, "passthrough_config.json")
         with open(config_file, 'r') as file:
             items:dict = json.load(file)
             for key in items:
-                based_on_clazz = NODE_CLASS_MAPPINGS[items[key]['based_on']]
-                inputs_to_pass = items[key]['inputs_to_pass']
-                passed_return_names = items[key].get('passed_return_names',None)
-                category = items[key].get('category',None)
-                clone = items[key].get('clone', None)
-                clazz = passthrough_factory(key, based_on_clazz, inputs_to_pass, passed_return_names, clone, category)
-            
-            # If there seems to be a problem give a warning but add it anyway
-            # in case the parent class has some weird dynamic RETURN_TYPEs
-            # The core code will reject it if it wants to
                 try:
-                    clazz.RETURN_TYPES
-                except PassthroughException:
-                    print(f"In passthrough config, {key} failed validation: {sys.exc_info()[1].args[0]} ")
+                    based_on_clazz = NODE_CLASS_MAPPINGS[items[key]['based_on']]
+                    inputs_to_pass = items[key]['inputs_to_pass']
+                    passed_return_names = items[key].get('passed_return_names',None)
+                    category = items[key].get('category',None)
+                    clone = items[key].get('clone', None)
+                    clazz = passthrough_factory(key, based_on_clazz, inputs_to_pass, passed_return_names, clone, category)
+                
+                # If there seems to be a problem give a warning but add it anyway
+                # in case the parent class has some weird dynamic RETURN_TYPEs
+                # The core code will reject it if it wants to
+                    try:
+                        clazz.RETURN_TYPES
+                    except PassthroughException:
+                        print(f"In passthrough config, {key} failed validation: {sys.exc_info()[1].args[0]} ")
 
-                MAP[key] = clazz
-                DISPLAY_MAP[key] = items[key].get('display_name', key)
-                PassthroughInfo.CREATED.append(DISPLAY_MAP[key])
-                    
+                    MAP[key] = clazz
+                    DISPLAY_MAP[key] = items[key].get('display_name', key)
+                    PassthroughInfo.CREATED.append(DISPLAY_MAP[key])
+                except:
+                    print(f"In passthrough config, {key} failed") 
+                    PassthroughInfo.FAILED.append(key)
+                        
     except (KeyError,PassthroughException,json.decoder.JSONDecodeError):
         print(f"passthrough_config error - {sys.exc_info()[0]} - {sys.exc_info()[1]}")
     return MAP, DISPLAY_MAP
