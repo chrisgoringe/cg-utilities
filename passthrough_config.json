@@ -1,15 +1,20 @@
 {
-    "VAEEncodeForInpaintReturn" : {
-        "display_name" : "VAE Encode For Inpaint Passthrough",
+    "VAE Encode For Inpaint Passthrough" : {
         "based_on" : "VAEEncodeForInpaint",
         "inputs_to_pass" : ["vae"], 
-        "category": null
+        "category": "latent"
     },
-    "VAEEncodeReturn" : {
-        "display_name" : "VAE Encode Passthrough",
+    "VAEEncode Passthrough" : {
         "based_on" : "VAEEncode",
         "inputs_to_pass" : ["vae"],
         "category": "latent"
     },
-    "SHOW" : 0
+    "KSampler Passthrough" : {
+        "based_on" : "KSampler",
+        "inputs_to_pass" : ["model","positive","negative","latent_image"],
+        "passed_return_names" : ["model","positive","negative","original_latent"],
+        "category": "sampling"
+    },
+
+    "SHOW" : 1
 }

@@ -8,12 +8,24 @@ class PassthroughException(Exception):
 class ReturnInput():
     CATEGORY = "utilities/passthrough"
     BASED_ON:type = None
-    PASSED = []
+    PASSED = PASSED_RETURN_NAMES = PASSED_TYPES = []
     FUNCTION = "_func"
 
+    def cloner(self, item, in_type):
+        if in_type=="LATENT":
+            r = {}
+            for key in item:
+                r[key] = item[key].clone()
+        elif in_type=="IMAGE":
+            r = item.clone()
+        else:
+            r = item
+        return r
+    
     def _func(self, **kwargs):
+        additional = tuple(self.cloner(kwargs[r], self.PASSED_TYPES[i]) for i, r in enumerate(self.PASSED))
         s = getattr(self, getattr(self.BASED_ON,"FUNCTION"))(**kwargs) 
-        return s + tuple(kwargs[r] for r in self.PASSED)
+        return s + additional
     
     @classmethod
     def INPUT_TYPES(cls):
@@ -23,23 +35,31 @@ class ReturnInput():
     def RETURN_TYPES(cls):
         s = cls.BASED_ON.RETURN_TYPES 
         in_types = cls.INPUT_TYPES()
+        cls.PASSED_TYPES = []
         for r in cls.PASSED:
             get_type = lambda key : in_types.get(key,{}).get(r,[None])[0]
             type = get_type('required') or get_type('optional') or get_type('hidden') or None
             if type is None:
                 raise PassthroughException(f"input {r} not found in {cls.BASED_ON}")
-            s = s + (r,)
-        return s
+            cls.PASSED_TYPES.append(type)
+        return s + tuple(cls.PASSED_TYPES)
     
     @classproperty
     def RETURN_NAMES(cls):
         s = cls.BASED_ON.RETURN_NAMES if hasattr(cls.BASED_ON, 'RETURN_NAMES') else cls.BASED_ON.RETURN_TYPES
-        return s + tuple(cls.PASSED_RETURN_NAMES if hasattr(cls, 'PASSED_RETURN_NAMES') else cls.PASSED) 
+        if hasattr(cls, 'PASSED_RETURN_NAMES') and cls.PASSED_RETURN_NAMES:
+            return s + tuple(cls.PASSED_RETURN_NAMES) 
+        else:
+            return s + tuple(cls.PASSED)
 
-def passthrough_factory(name, based_on_class, passed_input_list, category=None) -> type:
+def passthrough_factory(name, based_on_class, passed_input_list, passed_return_names, clone, category) -> type:
     return type(name, 
                 (ReturnInput,based_on_class,), 
-                {'BASED_ON':based_on_class, 'PASSED':passed_input_list, 'CATEGORY':category or ReturnInput.CATEGORY})
+                {'BASED_ON':based_on_class, 
+                 'PASSED':passed_input_list, 
+                 'PASSED_RETURN_NAMES':passed_return_names,
+                 'CLONE':clone,
+                 'CATEGORY':category or ReturnInput.CATEGORY})
 
 def create_passthroughs():
     MAP = {}
@@ -51,11 +71,12 @@ def create_passthroughs():
             for i, key in enumerate(items):
                 if key=='SHOW':
                     continue
-                class_name = f"passthrough_class_{i}"
                 based_on_clazz = NODE_CLASS_MAPPINGS[items[key]['based_on']]
                 inputs_to_pass = items[key]['inputs_to_pass']
+                passed_return_names = items[key].get('passed_return_names',None)
                 category = items[key].get('category',None)
-                clazz = passthrough_factory(class_name, based_on_clazz, inputs_to_pass, category)
+                clone = items[key].get('clone', None)
+                clazz = passthrough_factory(key, based_on_clazz, inputs_to_pass, passed_return_names, clone, category)
             
             # If there seems to be a problem give a warning but add it anyway
             # in case the parent class has some weird dynamic RETURN_TYPEs
@@ -65,8 +86,8 @@ def create_passthroughs():
                 except PassthroughException:
                     print(f"In passthrough config, {key} failed validation: {sys.exc_info()[1].args[0]} ")
 
-                MAP[class_name] = clazz
-                DISPLAY_MAP[class_name] = items[key].get('display_name', key)
+                MAP[key] = clazz
+                DISPLAY_MAP[key] = items[key].get('display_name', key)
             
             if 'SHOW' in items and items['SHOW']:
                 print("utilities_passthroughs: List of all unique names of node type that have been loaded and can be used in `based_on`:")
