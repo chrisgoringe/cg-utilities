@@ -28,7 +28,8 @@ class CombineImages(Base_utilities):
     RETURN_NAMES = ("image",)
     def func(self, image1, image2=None, image3=None, image4=None):
         return (torch.cat( tuple(i for i in (image1, image2, image3, image4) if i is not None), 0 ),)
-        
+
+@textdisplay        
 class ResizeImage(Base_utilities):
     CATEGORY = "utilities/images"
     REQUIRED = { 
@@ -75,7 +76,7 @@ class ResizeImage(Base_utilities):
         
         return (self.resize(image, height, width),
                 self.resize(image_to_match if image_to_match is not None else image, height, width),
-                width, height) 
+                width, height, f"{width} x {height}") 
     
 class CompareImages(Base_utilities):
     CATEGORY = "utilities/images"
