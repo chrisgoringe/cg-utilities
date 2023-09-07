@@ -1,4 +1,4 @@
-from .common import classproperty, module_root_directory_utilities, Base_utilities
+from .common import classproperty, module_root_directory_utilities, Base_utilities, textdisplay
 import json, os, sys
 from nodes import NODE_CLASS_MAPPINGS
 
@@ -61,17 +61,17 @@ def passthrough_factory(name, based_on_class, passed_input_list, passed_return_n
                  'CLONE':clone,
                  'CATEGORY':category or ReturnInput.CATEGORY})
 
+@textdisplay
 class PassthroughInfo(Base_utilities):
     CATEGORY = "utilities/info"
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("text_displayed",)
-    OUTPUT_NODE = True
+    RETURN_TYPES = ()
+    RETURN_NAMES = ()
     NAMES = CREATED = FAILED = []
     def func(self):
         s = ("\n".join(["Errors:",]+self.FAILED)+"\n\n" if self.FAILED else "") +\
                ("\n".join(["Classes created:",]+self.CREATED)+"\n\n" if self.CREATED else "") +\
                ("\n".join(["Classes available:",]+self.NAMES)+"\n\n" if self.NAMES else "")
-        return {"ui": {"text_displayed": s}, "result": (s,)}
+        return (s,)
 
 def create_passthroughs():
     MAP = {}

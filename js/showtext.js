@@ -16,7 +16,7 @@ if (install) {
 		name: name,
 		version: version,
 		async beforeRegisterNodeDef(nodeType, nodeData, app) {
-			if (nodeData.output_name.findIndex((n) => n==="text_displayed") >= 0 || nodeData.description === 'displays_text') {
+			if (nodeData.description.includes('displays_text')) {
 				const onExecuted = nodeType.prototype.onExecuted;
 				const onExecutionStart = nodeType.prototype.onExecutionStart;
 

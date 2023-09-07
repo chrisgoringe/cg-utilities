@@ -33,7 +33,7 @@ class classproperty(object):
         return self.f(owner)
     
 def textdisplay(clazz):
-    clazz.DESCRIPTION = "displays_text"
+    clazz.DESCRIPTION = "displays_text," + (clazz.DESCRIPTION if hasattr(clazz,'DESCRIPTION') else "")
     clazz.OUTPUT_NODE = True
     clazz._FUNCTION = getattr(clazz,'FUNCTION')
     def _func_(self, **kwargs):
