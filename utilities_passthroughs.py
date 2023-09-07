@@ -68,9 +68,10 @@ class PassthroughInfo(Base_utilities):
     OUTPUT_NODE = True
     NAMES = CREATED = FAILED = []
     def func(self):
-        return ("\n".join(["Errors:",]+self.FAILED)+"\n\n" if self.FAILED else "") +\
+        s = ("\n".join(["Errors:",]+self.FAILED)+"\n\n" if self.FAILED else "") +\
                ("\n".join(["Classes created:",]+self.CREATED)+"\n\n" if self.CREATED else "") +\
                ("\n".join(["Classes available:",]+self.NAMES)+"\n\n" if self.NAMES else "")
+        return {"ui": {"text_displayed": s}, "result": (s,)}
 
 def create_passthroughs():
     MAP = {}
