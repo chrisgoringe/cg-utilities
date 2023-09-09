@@ -3,7 +3,7 @@ from nodes import CLIPTextEncode, ConditioningSetMask
 
 class TwoClipTextEncode(Base_utilities):
     CATEGORY = "utilities/conditioning"
-    REQUIRED = {"clip": ("CLIP", {}), "prompt": ("STRING", {"default":""}), "negative_prompt": ("STRING", {"default":""})}
+    REQUIRED = {"clip": ("CLIP", {}), "prompt": ("STRING", {"default":"", "defaultInput": True}), "negative_prompt": ("STRING", {"default":""})}
     RETURN_TYPES = ("CONDITIONING", "CONDITIONING",)
     RETURN_NAMES = ("positive", "negative",)
     encoder = CLIPTextEncode().encode
