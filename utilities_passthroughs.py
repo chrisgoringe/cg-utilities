@@ -1,8 +1,8 @@
-from .common import module_root_directory
 from custom_nodes.cg_custom_core.base import BaseNode, classproperty
 from custom_nodes.cg_custom_core.ui_decorator import ui_signal
 import json, os, sys
 from nodes import NODE_CLASS_MAPPINGS
+module_root_directory = os.path.dirname(os.path.realpath(__file__))
 
 class PassthroughException(Exception):
     pass
