@@ -94,7 +94,7 @@ def create_passthroughs():
                     category = items[key].get('category',None)
                     clone = items[key].get('clone', None)
                     clazz = passthrough_factory(key, based_on_clazz, inputs_to_pass, passed_return_names, clone, category)
-                    print f"Added node {key} as passthrough"
+                    print (f"Added node {key} as passthrough")
                 
                 # If there seems to be a problem give a warning but add it anyway
                 # in case the parent class has some weird dynamic RETURN_TYPEs
