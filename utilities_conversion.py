@@ -1,6 +1,6 @@
-from .common import Base_utilities, classproperty
+from custom_nodes.cg_custom_core.base import BaseNode, classproperty
    
-class ConvertToString(Base_utilities):
+class ConvertToString(BaseNode):
     CATEGORY = "utilities/conversion"
     OPTIONAL = { "anything": ("*",{}) }
 

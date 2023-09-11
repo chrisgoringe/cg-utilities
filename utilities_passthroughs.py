@@ -1,4 +1,5 @@
-from .common import classproperty, module_root_directory_utilities, Base_utilities
+from .common import module_root_directory
+from custom_nodes.cg_custom_core.base import BaseNode, classproperty
 from custom_nodes.cg_custom_core.ui_decorator import ui_signal
 import json, os, sys
 from nodes import NODE_CLASS_MAPPINGS
@@ -63,7 +64,7 @@ def passthrough_factory(name, based_on_class, passed_input_list, passed_return_n
                  'CATEGORY':category or ReturnInput.CATEGORY})
 
 @ui_signal('display_text')
-class PassthroughInfo(Base_utilities):
+class PassthroughInfo(BaseNode):
     CATEGORY = "utilities/info"
     RETURN_TYPES = ()
     RETURN_NAMES = ()
@@ -82,7 +83,7 @@ def create_passthroughs():
     PassthroughInfo.FAILED = []
 
     try:
-        config_file = os.path.join(module_root_directory_utilities, "passthrough_config.json")
+        config_file = os.path.join(module_root_directory, "passthrough_config.json")
         with open(config_file, 'r') as file:
             items:dict = json.load(file)
             for key in items:
@@ -93,6 +94,7 @@ def create_passthroughs():
                     category = items[key].get('category',None)
                     clone = items[key].get('clone', None)
                     clazz = passthrough_factory(key, based_on_clazz, inputs_to_pass, passed_return_names, clone, category)
+                    print f"Added node {key} as passthrough"
                 
                 # If there seems to be a problem give a warning but add it anyway
                 # in case the parent class has some weird dynamic RETURN_TYPEs

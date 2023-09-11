@@ -1,7 +1,7 @@
-from .common import Base_utilities
+from custom_nodes.cg_custom_core.base import BaseNode
 from nodes import CLIPTextEncode, ConditioningSetMask
 
-class TwoClipTextEncode(Base_utilities):
+class TwoClipTextEncode(BaseNode):
     CATEGORY = "utilities/conditioning"
     REQUIRED = {"clip": ("CLIP", {}), "prompt": ("STRING", {"default":"", "defaultInput": True}), "negative_prompt": ("STRING", {"default":""})}
     RETURN_TYPES = ("CONDITIONING", "CONDITIONING",)
@@ -11,7 +11,7 @@ class TwoClipTextEncode(Base_utilities):
     def func(self, clip, prompt, negative_prompt):
         return(self.encoder(clip,prompt)[0], self.encoder(clip,negative_prompt)[0], )
     
-class MergeConditionings(Base_utilities):
+class MergeConditionings(BaseNode):
     CATEGORY = "utilities/conditioning"
     REQUIRED = {"conditioning1": ("CONDITIONING", ), "conditioning2": ("CONDITIONING", ), "mask": ("MASK", ), }
     RETURN_TYPES = ("CONDITIONING", )

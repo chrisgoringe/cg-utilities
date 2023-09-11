@@ -1,11 +1,11 @@
-from .common import Base_utilities
+from custom_nodes.cg_custom_core.base import BaseNode
 from custom_nodes.cg_custom_core.ui_decorator import ui_signal
 import torch
 import math
 from comfy_extras.nodes_post_processing import Blur
 
 @ui_signal('display_text')
-class ImageSize(Base_utilities):
+class ImageSize(BaseNode):
     CATEGORY = "utilities/images"
     REQUIRED = { "image": ("IMAGE",), }
     RETURN_TYPES = ("INT","INT",)
@@ -16,7 +16,7 @@ class ImageSize(Base_utilities):
         text = f"{w} x {h}"
         return (w,h,text)
     
-class CombineImages(Base_utilities):
+class CombineImages(BaseNode):
     CATEGORY = "utilities/images"
     REQUIRED = { 
         "image1": ("IMAGE",) ,
@@ -32,7 +32,7 @@ class CombineImages(Base_utilities):
         return (torch.cat( tuple(i for i in (image1, image2, image3, image4) if i is not None), 0 ),)
 
 @ui_signal('display_text') 
-class ResizeImage(Base_utilities):
+class ResizeImage(BaseNode):
     CATEGORY = "utilities/images"
     REQUIRED = { 
         "x8": (["yes", "no"],),
@@ -80,7 +80,7 @@ class ResizeImage(Base_utilities):
                 self.resize(image_to_match if image_to_match is not None else image, height, width),
                 width, height, f"{width} x {height}") 
     
-class CompareImages(Base_utilities):
+class CompareImages(BaseNode):
     CATEGORY = "utilities/images"
     REQUIRED = { "image1": ("IMAGE",), "image2": ("IMAGE",), }
     RETURN_TYPES = ("IMAGE","IMAGE")
@@ -93,7 +93,7 @@ class CompareImages(Base_utilities):
         combined = torch.cat((image1,image2,result),0)
         return (combined, result, )
     
-class MaskHardenAndBlur(Base_utilities, Blur):
+class MaskHardenAndBlur(BaseNode, Blur):
     CATEGORY = "utilities/images"
     REQUIRED = { "mask" : ("MASK", {}), 
                  "threshold" : ("FLOAT",{"default":0.5, "min":0.0, "max":1.0, "step":0.01}), 

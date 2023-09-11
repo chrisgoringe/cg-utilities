@@ -1,6 +1,6 @@
-from .common import Base_utilities, classproperty
+from custom_nodes.cg_custom_core.base import BaseNode, classproperty
    
-class PrimitiveString(Base_utilities):
+class PrimitiveString(BaseNode):
     CATEGORY = "utilities/primitives"
     TYPE = "STRING"
     DEFAULT = ""

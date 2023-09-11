@@ -15,6 +15,7 @@ A set of nodes that I find really helpful in making clean workflows...
 ## utilities/conditioning
 
 `Two Clip Text Encode` - one clip, two text strings, two conditioninings. For prompt and negative prompt.
+`Merge Conditionings` - merge two conditionings based on a mask
 
 ## utilities/conversion
 
@@ -40,15 +41,19 @@ The result is two images (identical, if there was no **image_to_match**), equal 
 
 `Combine Images` - Combines up to four images (or lists of images) into a list of images.
 
+`Mask Harden and Blur` - Takes a mask and sets it to 1 or 0 based on a threshold, then blurs the edges. Useful for recombining images.
+
 ## utilities/primitives
 
-`String|Int|Float[ Pair]` - One or two primitive values 
+`String|Int|Float` - Primitive values 
 
 ## utilities/strings
 
 `Show Text` - Take text input and display it in the UI. 
 
 `Regex Substitution` - Takes a string input and does a regex substitution on it, returning the result and the number of substitutions made. Uses python `regex.sub()` [docs](https://docs.python.org/3/library/re.html)
+
+`Substitute` - Takes a template and substitutes `[X]` and `[Y]` with the inputs, and `%date%` with `DD-MM-YYYY`
 
 ## utilities/passthrough     
 
@@ -63,7 +68,7 @@ Create a custom node based on any other node, with one or more of the inputs add
     },
 ```
 
-If the key `SHOW` is present (and has a non-zero value) a list of valid `based_on` values will be printed.
+`Passthrough Info` - shows the nodes that could be used for `based_on`
 
 ## Acknowledgements
 

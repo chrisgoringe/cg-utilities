@@ -1,4 +1,15 @@
-import sys, os, shutil
+import sys, os, shutil, git
+import folder_paths
+try:
+    import custom_nodes.cg_custom_core
+except:
+    print("Installing cg_custom_nodes")
+    repo_path = os.path.join(os.path.dirname(folder_paths.__file__), 'custom_nodes', 'cg_custom_core')  
+    repo = git.Repo.clone_from('https://github.com/chrisgoringe/cg-custom-core.git/', repo_path)
+    repo.git.clear_cache()
+    repo.close()
+
+
 sys.path.insert(0,os.path.dirname(os.path.realpath(__file__)))
 from .utilities_conversion import *
 from .utilities_primitives import *
@@ -52,4 +63,4 @@ for m in PASSTHROUGH_NAME_MAPPINGS:
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 
-shutil.copytree(module_js_directory_utilities, application_web_extensions_directory, dirs_exist_ok=True)
+shutil.copytree(module_js_directory, application_web_extensions_directory, dirs_exist_ok=True)

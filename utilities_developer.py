@@ -1,6 +1,6 @@
-from .common import Base_utilities
+from custom_nodes.cg_custom_core.base import BaseNode
    
-class Inspect(Base_utilities):
+class Inspect(BaseNode):
     CATEGORY = "utilities/developer"
     OPTIONAL = { "anything": ("*",{}) }
     OUTPUT_NODE = True
@@ -9,7 +9,7 @@ class Inspect(Base_utilities):
         pass # put breakpoint here
         return()
 
-class ComboPass(Base_utilities):
+class ComboPass(BaseNode):
     CATEGORY = "utilities/developer"
     REQUIRED = { "option": ([""],{})}
     RETURN_TYPES = ("*",)
