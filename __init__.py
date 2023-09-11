@@ -19,11 +19,13 @@ NODE_CLASS_MAPPINGS = {
                         "To Float" : ConvertToFloat,
                       # developer
                         "Inspect" : Inspect,
+                        "ComboPass" : ComboPass,
                       # images
                         "Image Size" : ImageSize,
                         "Resize Image" : ResizeImage,
                         "Combine Images" : CombineImages,
                         "Compare Images" : CompareImages,
+                        "Mask Harden and Blur" : MaskHardenAndBlur,
                       # primitives
                         "String_" : PrimitiveString,
                         "Int_" : PrimitiveInt,

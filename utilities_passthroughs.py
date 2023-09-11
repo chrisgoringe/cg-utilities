@@ -1,4 +1,5 @@
-from .common import classproperty, module_root_directory_utilities, Base_utilities, textdisplay
+from .common import classproperty, module_root_directory_utilities, Base_utilities
+from custom_nodes.cg_custom_core.ui_decorator import ui_signal
 import json, os, sys
 from nodes import NODE_CLASS_MAPPINGS
 
@@ -61,7 +62,7 @@ def passthrough_factory(name, based_on_class, passed_input_list, passed_return_n
                  'CLONE':clone,
                  'CATEGORY':category or ReturnInput.CATEGORY})
 
-@textdisplay
+@ui_signal('display_text')
 class PassthroughInfo(Base_utilities):
     CATEGORY = "utilities/info"
     RETURN_TYPES = ()

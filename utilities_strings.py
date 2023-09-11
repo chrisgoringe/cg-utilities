@@ -1,12 +1,16 @@
-from .common import Base_utilities, textdisplay
+from .common import Base_utilities
+from custom_nodes.cg_custom_core.ui_decorator import ui_signal
 import re, datetime
+from comfy_extras.ui_decorator import ui_signal
 
-@textdisplay
+@ui_signal('display_text')
 class ShowText(Base_utilities):
     CATEGORY = "utilities/strings"
     REQUIRED = { "text": ("STRING", {"forceInput": True}), }
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("text",)
     def func(self, text):
-        return (text,)
+        return (text,text,)
     
 class RegexSub(Base_utilities):
     CATEGORY = "utilities/strings"

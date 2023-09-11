@@ -1,8 +1,10 @@
-from .common import Base_utilities, textdisplay
+from .common import Base_utilities
+from custom_nodes.cg_custom_core.ui_decorator import ui_signal
 import torch
 import math
+from comfy_extras.nodes_post_processing import Blur
 
-@textdisplay
+@ui_signal('display_text')
 class ImageSize(Base_utilities):
     CATEGORY = "utilities/images"
     REQUIRED = { "image": ("IMAGE",), }
@@ -29,7 +31,7 @@ class CombineImages(Base_utilities):
     def func(self, image1, image2=None, image3=None, image4=None):
         return (torch.cat( tuple(i for i in (image1, image2, image3, image4) if i is not None), 0 ),)
 
-@textdisplay        
+@ui_signal('display_text') 
 class ResizeImage(Base_utilities):
     CATEGORY = "utilities/images"
     REQUIRED = { 
@@ -90,3 +92,18 @@ class CompareImages(Base_utilities):
         result = torch.stack([mean for _ in range(3)],3)
         combined = torch.cat((image1,image2,result),0)
         return (combined, result, )
+    
+class MaskHardenAndBlur(Base_utilities, Blur):
+    CATEGORY = "utilities/images"
+    REQUIRED = { "mask" : ("MASK", {}), 
+                 "threshold" : ("FLOAT",{"default":0.5, "min":0.0, "max":1.0, "step":0.01}), 
+                 "blur_radius": ("INT", {"default": 1, "min": 1, "max": 31, "step": 1 }),
+                 "sigma": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1 }),
+                }
+    RETURN_TYPES = ("MASK",)
+    RETURN_NAMES = ("mask",)
+    def func(self, mask, threshold, blur_radius, sigma):
+        m = torch.where(mask>threshold,1.0,0.0)
+        m = m.unsqueeze(2).unsqueeze(0)
+        blurred:torch.Tensor = self.blur(m, blur_radius, sigma)[0].squeeze()
+        return (blurred,)

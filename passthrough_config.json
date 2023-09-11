@@ -14,5 +14,10 @@
         "inputs_to_pass" : ["model","positive","negative","latent_image"],
         "passed_return_names" : ["model","positive","negative","original_latent"],
         "category": "sampling"
+    },
+    "Load LoRA Passthrough" : {
+        "based_on" : "LoraLoader",
+        "inputs_to_pass" : ["lora_name"],
+        "category" : "loaders"
     }
 }
