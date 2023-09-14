@@ -60,7 +60,7 @@ Once a final size has been determined, the *image* and *image_to_match* (if any)
 
 ## utilities/passthrough     
 
-Create a custom node based on any other node, with one or more of the inputs added as outputs. Look at `passthrough_config.json` for how do this (changes require a restart of ComfyUI and reload of the webpage) - the example takes the `VAE Encode For Inpaint` node and adds an output, `vae`, which is a copy of the input of the same name. This can be useful for making workflows tidier! Note that widget inputs can be output - sometimes useful to reuse a seed, or use the name of a checkpoint or LoRA.
+Create a custom node based on any other node, with one or more of the inputs added as outputs. Look at `passthrough_config.json` for how do this (changes require a restart of ComfyUI and reload of the webpage) - the example below takes the `VAE Encode For Inpaint` node and adds an output, `vae`, which is a copy of the input of the same name. This can be useful for making workflows tidier! Note that widget inputs can be output - sometimes useful to reuse a seed, or use the name of a checkpoint or LoRA.
 
 ```json
     "VAEEncodeForInpaintReturn" : {                             # a name unique in this file
