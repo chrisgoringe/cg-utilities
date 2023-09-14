@@ -1,7 +1,6 @@
 from custom_nodes.cg_custom_core.base import BaseNode
 from custom_nodes.cg_custom_core.ui_decorator import ui_signal
 import re, datetime
-from comfy_extras.ui_decorator import ui_signal
 
 @ui_signal('display_text')
 class ShowText(BaseNode):

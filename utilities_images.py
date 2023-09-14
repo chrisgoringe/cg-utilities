@@ -35,7 +35,7 @@ class CombineImages(BaseNode):
 class ResizeImage(BaseNode):
     CATEGORY = "utilities/images"
     REQUIRED = { 
-        "x8": (["yes", "no"],),
+        "constraint": (["x8", "cn512", "none"],),
         "image": ("IMAGE",),
         "factor": ("FLOAT", {"default":1.0, "min":0.0, "step":0.1 }),
         "max_dimension": ("INT", {"default": 10000, }), 
@@ -55,23 +55,31 @@ class ResizeImage(BaseNode):
         scaled = torch.nn.functional.interpolate(permed, size=(height, width))
         return torch.permute(scaled, (0, 2, 3, 1))
 
-    def func(self, x8:str, image:torch.tensor, factor:float=1.0, max_dimension:int=0, image_to_match:torch.tensor=None):
+    def func(self, constraint:str, image:torch.tensor, factor:float=1.0, max_dimension:int=0, image_to_match:torch.tensor=None):
         if image_to_match is not None:
             height, width = image_to_match.shape[1:3]
         else:
             height, width = image.shape[1:3]
 
-        height = height * factor
-        width = width * factor
+        if constraint!="cn512":
+            height = height * factor
+            width = width * factor
 
-        too_big_by = max(height/max_dimension, width/max_dimension)
-        if too_big_by > 1.0:
-            height = math.floor(height/too_big_by)
-            width = math.floor(width/too_big_by)
+            too_big_by = max(height/max_dimension, width/max_dimension)
+            if too_big_by > 1.0:
+                height = math.floor(height/too_big_by)
+                width = math.floor(width/too_big_by)
 
-        if x8=="yes":
+        if constraint=="x8":
             height = ((4+height)//8) * 8
             width = ((4+width)//8) * 8
+        elif constraint=="cn512":
+            if height >= width:
+                height = (((height*512/width)+32)//64) * 64
+                width = 512
+            else:
+                width = (((width*512/height)+32)//64) * 64
+                height = 512
 
         height = int(height)
         width = int(width)

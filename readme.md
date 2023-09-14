@@ -10,11 +10,12 @@ cd [path to ComfyUI]/custom_nodes
 git clone https://github.com/chrisgoringe/cg-utilities.git
 ```
 
-A set of nodes that I find really helpful in making clean workflows...
+A set of nodes that I find really helpful in making clean workflows. Several of these nodes make use of my [core node code](https://github.com/chrisgoringe/cg-custom-core), which should be automatically installed when you first use the nodes (note that this may require ComfyUI to be restarted) if it isn't present.
 
 ## utilities/conditioning
 
 `Two Clip Text Encode` - one clip, two text strings, two conditioninings. For prompt and negative prompt.
+
 `Merge Conditionings` - merge two conditionings based on a mask
 
 ## utilities/conversion
@@ -26,20 +27,22 @@ A set of nodes that I find really helpful in making clean workflows...
 `Inspect` - the simplest class of all time - takes any input, and does nothing. If you're a developer, put a breakpoint permanently at line 9 of utilitites_developer.py
 and use this node to look at anything.
 
+`Combo Pass` - WIP. Suggest you don't use this.
+
 ## utilities/images
 
 `Image Size` - Get the size of an image
 
-`Resize Image` - Resize an image. Does the following steps to calculate the new size:
-- Takes the size of the incoming image, or the size of the **image_to_match** (if there is one)
-- Multiplies by **factor** (default 1.0 does nothing)
-- If resulting  height or width is larger than **max_dimension**, reduce them (preserving aspect ratio)
-- if **x8** is 'yes' (the default), round height and width (independantly) to the nearest multiple of 8
-The image is then rescaled (using torch.nn.functional.interpolate) to the new size. If there was an **image_to_match** it is also rescaled.
+`Resize Image` - Constrained resize of an image. The initial size is the size of *image_to_match*, if that (optional) input is connected, else the size of *image*. There are three constraint modes:
+- `none` - the image is scaled by *factor*, and then scaled down if the resulting height or width is greater than *max_dimension*.
+- `x8` - as for `none`, but the height and width are adjusted to be the nearest multiple of 8.
+- `cn512` - rescale to a ControlNet-compatible size. The image is rescaled to make the shorter dimension equal to 512, and the longer dimension a multiple of 64, while keeping the aspect ratio as close to the original as possible.
 
-The result is two images (identical, if there was no **image_to_match**), equal to or smaller than **max_dimension** (or if **x8**, than the nearest multiple of 8 to **max_dimension**), and of identical sizes.
+Once a final size has been determined, the *image* and *image_to_match* (if any) are both rescaled to the same size.
 
 `Combine Images` - Combines up to four images (or lists of images) into a list of images.
+
+`Compare Images` - Pixel-size comparison of two images, outputting a greyscale image of the changes between them.
 
 `Mask Harden and Blur` - Takes a mask and sets it to 1 or 0 based on a threshold, then blurs the edges. Useful for recombining images.
 
@@ -57,7 +60,7 @@ The result is two images (identical, if there was no **image_to_match**), equal 
 
 ## utilities/passthrough     
 
-Create a custom node based on any other node, with one or more of the inputs added as outputs. Look at `passthrough_config.json` for how do this (changes require a restart of ComfyUI and reload of the webpage):
+Create a custom node based on any other node, with one or more of the inputs added as outputs. Look at `passthrough_config.json` for how do this (changes require a restart of ComfyUI and reload of the webpage) - the example takes the `VAE Encode For Inpaint` node and adds an output, `vae`, which is a copy of the input of the same name. This can be useful for making workflows tidier! Note that widget inputs can be output - sometimes useful to reuse a seed, or use the name of a checkpoint or LoRA.
 
 ```json
     "VAEEncodeForInpaintReturn" : {                             # a name unique in this file
