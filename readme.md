@@ -34,15 +34,15 @@ and use this node to look at anything.
 `Image Size` - Get the size of an image
 
 `Resize Image` - Constrained resize of an image. The initial size is the size of *image_to_match*, if that (optional) input is connected, else the size of *image*. There are three constraint modes:
-- `none` - the image is scaled by *factor*, and then scaled down if the resulting height or width is greater than *max_dimension*.
-- `x8` - as for `none`, but the height and width are adjusted to be the nearest multiple of 8.
+- `none` - the image is scaled by *factor*, and then scaled down if the resulting height or width is greater than *max_dimension* (keeping the aspect ratio fixed).
+- `x8` - as for `none`, but the height and width are adjusted at the end to the nearest multiple of 8. Lots of nodes need an image to be a multiple of 8 pixels in each direction.
 - `cn512` - rescale to a ControlNet-compatible size. The image is rescaled to make the shorter dimension equal to 512, and the longer dimension a multiple of 64, while keeping the aspect ratio as close to the original as possible.
 
 Once a final size has been determined, the *image* and *image_to_match* (if any) are both rescaled to the same size.
 
 `Combine Images` - Combines up to four images (or lists of images) into a list of images.
 
-`Compare Images` - Pixel-size comparison of two images, outputting a greyscale image of the changes between them.
+`Compare Images` - Pixel-wise comparison of two images, outputting a greyscale image of the differences between them.
 
 `Mask Harden and Blur` - Takes a mask and sets it to 1 or 0 based on a threshold, then blurs the edges. Useful for recombining images.
 
