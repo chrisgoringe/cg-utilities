@@ -39,6 +39,7 @@ NODE_CLASS_MAPPINGS = {
                         "Combine Images" : CombineImages,
                         "Compare Images" : CompareImages,
                         "Mask Harden and Blur" : MaskHardenAndBlur,
+                        "Save Image As" : SaveImageAs,
                       # primitives
                         "String_" : PrimitiveString,
                         "Int_" : PrimitiveInt,

@@ -1,8 +1,15 @@
+import math, os, json
+from PIL import Image
+from PIL.PngImagePlugin import PngInfo
+import torch
+import numpy as np
+
+from comfy_extras.nodes_post_processing import Blur
+from comfy.cli_args import args
+import folder_paths
+
 from custom_nodes.cg_custom_core.base import BaseNode
 from custom_nodes.cg_custom_core.ui_decorator import ui_signal
-import torch
-import math
-from comfy_extras.nodes_post_processing import Blur
 
 @ui_signal('display_text')
 class ImageSize(BaseNode):
@@ -115,3 +122,28 @@ class MaskHardenAndBlur(BaseNode, Blur):
         m = m.unsqueeze(2).unsqueeze(0)
         blurred:torch.Tensor = self.blur(m, blur_radius, sigma)[0].squeeze()
         return (blurred,)
+
+class SaveImageAs(BaseNode):
+    CATEGORY = "utilities/images"
+    REQUIRED = {"image": ("IMAGE",), 
+                "filename": ("STRING",{"default":""})}
+    HIDDEN = {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"}
+    OUTPUT_NODE = True
+    def func(self, image, filename, prompt, extra_pnginfo):
+        full_folder = os.path.join(folder_paths.get_output_directory(), os.path.dirname(os.path.normpath(filename)))
+        if not os.path.exists(full_folder):
+            os.makedirs(full_folder)
+        filename = os.path.basename(os.path.normpath(filename))
+        i = 255. * image[0].cpu().numpy()
+        img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+
+        if not args.disable_metadata:
+            metadata = PngInfo()
+            if prompt is not None:
+                metadata.add_text("prompt", json.dumps(prompt))
+            if extra_pnginfo is not None:
+                for x in extra_pnginfo:
+                    metadata.add_text(x, json.dumps(extra_pnginfo[x]))
+
+        img.save(os.path.join(full_folder, filename), pnginfo=metadata, compress_level=4)
+        return ()
