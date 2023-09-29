@@ -94,19 +94,24 @@ class ResizeImage(BaseNode):
         return (self.resize(image, height, width),
                 self.resize(image_to_match if image_to_match is not None else image, height, width),
                 width, height, f"{width} x {height}") 
-    
+
+@ui_signal('display_text') 
 class CompareImages(BaseNode):
     CATEGORY = "utilities/images"
-    REQUIRED = { "image1": ("IMAGE",), "image2": ("IMAGE",), }
-    RETURN_TYPES = ("IMAGE","IMAGE")
-    RETURN_NAMES = ("all", "diff",)
+    REQUIRED = { "image1": ("IMAGE",), "image2": ("IMAGE",), "multiplier": ("FLOAT", {"default":1.0})}
+    RETURN_TYPES = ("IMAGE","IMAGE","FLOAT")
+    RETURN_NAMES = ("all", "diff","mse",)
+    lf = torch.nn.MSELoss()
 
-    def func(self, image1:torch.Tensor, image2:torch.Tensor):
-        diff = torch.abs(image1-image2)
+    def func(self, image1:torch.Tensor, image2:torch.Tensor, multiplier:float):
+        diff = torch.clamp(torch.abs(image1-image2) * multiplier, 0.0, 1.0)
         mean = torch.mean(diff,3)
         result = torch.stack([mean for _ in range(3)],3)
         combined = torch.cat((image1,image2,result),0)
-        return (combined, result, )
+        mean = torch.mean(diff.flatten())
+        mse = float(self.lf(image1,image2))
+        message = "MSE diff {:12.10f}".format(mse)
+        return (combined, result, mse, message)
     
 class MaskHardenAndBlur(BaseNode, Blur):
     CATEGORY = "utilities/images"
