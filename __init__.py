@@ -51,6 +51,7 @@ NODE_CLASS_MAPPINGS = {
                         "Regex Extraction" : RegexExtract,    
                         "Substitute" : Substitute,      
                         "JSON Dictionary Key" : JSONDictionaryKey,
+                        "Simple Log" : SimpleLog,
                       # info
                         "Passthrough Info" : PassthroughInfo,    
                       }

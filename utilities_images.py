@@ -45,7 +45,7 @@ class ResizeImage(BaseNode):
         "constraint": (["x8", "cn512", "none"],),
         "image": ("IMAGE",),
         "factor": ("FLOAT", {"default":1.0, "min":0.0, "step":0.1 }),
-        "max_dimension": ("INT", {"default": 10000, }), 
+        "max_dimension": ("INT", {"default": 10000, "max" : 10000 }), 
     }
     OPTIONAL = {
         "image_to_match": ("IMAGE",),

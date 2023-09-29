@@ -70,3 +70,11 @@ class Substitute(BaseNode):
         return (template.replace("[X]",str(x)).replace("[Y]",str(y)).replace(r"%date%",self.date_str()),)
     def date_str(self):
         return datetime.datetime.today().strftime('%Y-%m-%d')    
+
+class SimpleLog(BaseNode):
+    CATEGORY = "utilities/strings"
+    REQUIRED = {"log": ("STRING", {"forceInput" : True })}
+    OUTPUT_NODE = True
+    def func(self, log):
+        print(log)
+        return ()
