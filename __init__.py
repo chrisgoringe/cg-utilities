@@ -43,11 +43,14 @@ NODE_CLASS_MAPPINGS = {
                       # primitives
                         "String_" : PrimitiveString,
                         "Int_" : PrimitiveInt,
+                        "Seed_" : PrimitiveSeed,
                         "Float_" : PrimitiveFloat,
                       # strings
                         "Show Text" : ShowText,
                         "Regex Substitution" : RegexSub,      
+                        "Regex Extraction" : RegexExtract,    
                         "Substitute" : Substitute,      
+                        "JSON Dictionary Key" : JSONDictionaryKey,
                       # info
                         "Passthrough Info" : PassthroughInfo,    
                       }
@@ -59,6 +62,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
                         "String_" : "String",
                         "Int_" : "Int",
                         "Float_" : "Float",   
+                        "Seed_" : "Seed",   
 }
 
 for m in PASSTHROUGH_NAME_MAPPINGS:

@@ -1,6 +1,6 @@
 from custom_nodes.cg_custom_core.base import BaseNode
 from custom_nodes.cg_custom_core.ui_decorator import ui_signal
-import re, datetime
+import re, datetime, json
 
 @ui_signal('display_text')
 class ShowText(BaseNode):
@@ -26,6 +26,39 @@ class RegexSub(BaseNode):
         except:
             print("Exception in RegexSub")
             return (text,)
+
+class JSONDictionaryKey(BaseNode):
+    CATEGORY = "utilities/strings"
+    REQUIRED = {"text": ("STRING", {"forceInput": True}), 
+                "key": ("STRING", {"default": "" }),
+                } 
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("value",)
+    def func(self, text, key):
+        try:
+            d = json.loads(text)[key]
+            if isinstance(d,str):
+                return (d.encode('utf-8','ignore').decode("utf-8"),)
+            return (json.dumps(d),) 
+        except:
+            print("Exception in RegexSub")
+            return ("",)
+        
+class RegexExtract(BaseNode):
+    CATEGORY = "utilities/strings"
+    REQUIRED = {"text": ("STRING", {"forceInput": True}), 
+                "pattern": ("STRING", {"default": "" }),
+                }
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("match",)
+
+    def func(self, text, pattern):
+        try:
+            z = re.search(pattern, text)
+            return (z.group(0),) if z else ("",)
+        except:
+            print("Exception in RegexSub")
+            return ("",)
         
 class Substitute(BaseNode):
     CATEGORY = "utilities/strings"

@@ -20,13 +20,21 @@ class PrimitiveString(BaseNode):
     @classmethod
     def func(cls, value):
         return (value,)
-        
+    
 class PrimitiveInt(PrimitiveString):
     TYPE = "INT"
     DEFAULT = 0
     @classproperty
     def REQUIRED(cls):
         return { "value": (cls.TYPE, {"default": cls.DEFAULT}) }
+    
+class PrimitiveSeed(PrimitiveInt):
+    @classproperty
+    def REQUIRED(cls):
+        return { "seed": (cls.TYPE, {"default": cls.DEFAULT, "min":0, "max": 0xffffffffffffffff}) }
+    @classmethod
+    def func(cls, seed):
+        return (seed,)
 
 class PrimitiveFloat(PrimitiveInt):
     TYPE = "FLOAT"
