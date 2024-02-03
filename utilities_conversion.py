@@ -1,4 +1,4 @@
-from custom_nodes.cg_custom_core.base import BaseNode, classproperty
+from .base import BaseNode, classproperty
    
 class ConvertToString(BaseNode):
     CATEGORY = "utilities/conversion"

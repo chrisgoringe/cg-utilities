@@ -1,4 +1,4 @@
-from custom_nodes.cg_custom_core.base import BaseNode
+from .base import BaseNode
 from nodes import CLIPTextEncode, ConditioningSetMask
 
 class TwoClipTextEncode(BaseNode):

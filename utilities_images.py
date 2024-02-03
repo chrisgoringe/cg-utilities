@@ -8,8 +8,8 @@ from comfy_extras.nodes_post_processing import Blur
 from comfy.cli_args import args
 import folder_paths
 
-from custom_nodes.cg_custom_core.base import BaseNode
-from custom_nodes.cg_custom_core.ui_decorator import ui_signal
+from .base import BaseNode
+from .ui_decorator import ui_signal
 
 @ui_signal('display_text')
 class ImageSize(BaseNode):

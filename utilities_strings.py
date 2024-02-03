@@ -1,15 +1,5 @@
-from custom_nodes.cg_custom_core.base import BaseNode
-from custom_nodes.cg_custom_core.ui_decorator import ui_signal
+from .base import BaseNode
 import re, datetime, json
-
-@ui_signal('display_text')
-class ShowText(BaseNode):
-    CATEGORY = "utilities/strings"
-    REQUIRED = { "text": ("STRING", {"forceInput": True}), }
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("text",)
-    def func(self, text):
-        return (text,text,)
     
 class RegexSub(BaseNode):
     CATEGORY = "utilities/strings"
@@ -36,12 +26,14 @@ class JSONDictionaryKey(BaseNode):
     RETURN_NAMES = ("value",)
     def func(self, text, key):
         try:
-            d = json.loads(text)[key]
-            if isinstance(d,str):
-                return (d.encode('utf-8','ignore').decode("utf-8"),)
-            return (json.dumps(d),) 
+            js = json.loads(text)
+            for k in key.split(','):
+                js = js[k]
+            if isinstance(js,str):
+                return (js.encode('utf-8','ignore').decode("utf-8"),)
+            return (json.dumps(js, indent=2),) 
         except:
-            print("Exception in RegexSub")
+            print("Exception in JSONDictionaryKey")
             return ("",)
         
 class RegexExtract(BaseNode):
@@ -67,14 +59,6 @@ class Substitute(BaseNode):
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("string",)
     def func(self, template:str, x="", y=""):
-        return (template.replace("[X]",str(x)).replace("[Y]",str(y)).replace(r"%date%",self.date_str()),)
+        return (template.replace("[X]",str(x)).replace("[Y]",str(y)).replace(r"%date%",self.date_str()).replace('\ufeff',''),)
     def date_str(self):
         return datetime.datetime.today().strftime('%Y-%m-%d')    
-
-class SimpleLog(BaseNode):
-    CATEGORY = "utilities/strings"
-    REQUIRED = {"log": ("STRING", {"forceInput" : True })}
-    OUTPUT_NODE = True
-    def func(self, log):
-        print(log)
-        return ()
