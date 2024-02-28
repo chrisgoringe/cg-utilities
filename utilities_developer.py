@@ -2,10 +2,10 @@ from .base import BaseNode
    
 class Inspect(BaseNode):
     CATEGORY = "utilities/developer"
-    OPTIONAL = { "anything": ("*",{}) }
+    OPTIONAL = { "anything": ("*",{}), "anything_else": ("*",{}) }
     OUTPUT_NODE = True
 
-    def func(cls, anything=None):
+    def func(cls, **kwargs):
         pass # put breakpoint here
         return()
 
