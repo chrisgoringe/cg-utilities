@@ -10,18 +10,6 @@ import folder_paths
 
 from .base import BaseNode
 from .ui_decorator import ui_signal
-
-@ui_signal('display_text')
-class ImageSize(BaseNode):
-    CATEGORY = "utilities/images"
-    REQUIRED = { "image": ("IMAGE",), }
-    RETURN_TYPES = ("INT","INT",)
-    RETURN_NAMES = ("width","height",)
-
-    def func(self, image:torch.Tensor):
-        w, h = image.shape[2],image.shape[1]
-        text = f"{w} x {h}"
-        return (w,h,text)
     
 class CombineImages(BaseNode):
     CATEGORY = "utilities/images"
